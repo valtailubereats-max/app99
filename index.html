@@ -32,11 +32,9 @@
     display: flex; align-items: center; justify-content: center;
     font-weight: 800; font-size: 18px; cursor: pointer;
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    transition: transform 0.2s;
-    flex-shrink: 0;
+    transition: transform 0.2s; flex-shrink: 0;
   }
-  .logo-circle:active { transform: scale(0.95); }
-  
+
   .lang-box {
     position: absolute; top: 10px; right: 10px; background: white;
     border: 1px solid #ddd; border-radius: 12px; padding: 2px 8px;
@@ -155,7 +153,7 @@
             <input type="number" id="cfgMaxWeeks" class="admin-input" min="1" max="10" placeholder="Máx Semanas">
             <input type="color" id="cfgMainColor" class="admin-input" style="height:45px;">
             <input type="color" id="cfgAccentColor" class="admin-input" style="height:45px;">
-            <select id="cfgStartDay" class="admin-input"><option value="1">Início: Segunda</option><option value="0">Início: Domingo</option></select>
+            <select id="cfgStartDay" class="admin-input"><option value="0">Início: Domingo</option><option value="1">Início: Segunda</option></select>
             <div style="display:flex; align-items:center; background:#eee; padding:10px; border-radius:12px; justify-content: space-between;">
                 <span style="font-size:12px; font-weight:800; color:#555;">MOSTRAR CALENDÁRIO</span>
                 <input type="checkbox" id="cfgShowCal">
@@ -183,32 +181,32 @@ const LANGS = {
     en: { 
         send: "Send via WhatsApp", cal: "Calendar", share: "Share", qty: "Quantity", jump: "Weeks", date: "DATE", week: "Week", avail: "Available", unavail: "Unavailable", history: "RECENT REPORTS", clear: "CLEAR", faqT: "📖 User Manual", support: "Support", ok: "CLOSE", days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         manual: [
-            {q: "📍 Marking Days", a: "Tap any row to toggle between ✅ (Available) and ❌ (Unavailable)."},
-            {q: "📲 WhatsApp Sending", a: "Green button creates a report and opens your WhatsApp automatically."},
-            {q: "📅 Period Selection", a: "Use 'Quantity' to see more weeks and 'Weeks' to select the starting date."},
-            {q: "🎭 Event Mode", a: "If active, week selectors are hidden to focus on that specific event."},
-            {q: "📂 History", a: "Check your last 6 reports at the bottom. Use 'CLEAR' to delete local logs."},
-            {q: "🗓️ Extra Tools", a: "Blue: Personal calendar. Grey: Share this app link."},
-            {q: "⚙️ Admin", a: "Long press logo for 3 seconds to access colors and settings."},
-            {q: "🎧 Support", a: "Questions? Click the support link in the footer to contact Valtail Solutions."}
+            {q: "📍 How to mark days?", a: "Tap any row to toggle between ✅ (Available) and ❌ (Unavailable)."},
+            {q: "📲 Send to WhatsApp", a: "The green button generates a report and opens WhatsApp automatically."},
+            {q: "📅 Period Choice", a: "In 'Quantity' set how many weeks you want. In 'Weeks' choose the start."},
+            {q: "🎭 Event Mode", a: "If active, the app focuses only on that event and hides calendar filters."},
+            {q: "📂 History", a: "Check your last 6 sends at the bottom. Use 'CLEAR' to delete."},
+            {q: "🗓️ Extras", a: "Blue: Personal calendar. Gray: Share the app link."},
+            {q: "⚙️ Admin", a: "Long press the logo for 3 seconds to change colors and settings."},
+            {q: "🎧 Support", a: "Questions? Click the support link in the footer to talk to Valtail Solutions."}
         ]
     },
     ro: { 
-        send: "Trimite prin WhatsApp", cal: "Calendar", share: "Partajează", qty: "Cantitate", jump: "Săptămâni", date: "DATA", week: "Săptămână", avail: "Disponibil", unavail: "Indisponibil", history: "RAPOARTE RECENTE", clear: "ȘTERGE", faqT: "📖 Manual Utilizare", support: "Suport", ok: "ÎNCHIDE", days: ["Duminică", "Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă"],
+        send: "Trimite pe WhatsApp", cal: "Calendar", share: "Partajează", qty: "Cantitate", jump: "Săptămâni", date: "DATA", week: "Săptămâna", avail: "Disponibil", unavail: "Indisponibil", history: "RAPOARTE RECENTE", clear: "ȘTERGE", faqT: "📖 Manual de utilizare", support: "Suport", ok: "ÎNCHIDE", days: ["Duminică", "Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă"],
         manual: [
-            {q: "📍 Marcare zile", a: "Apasă pe orice rând pentru a schimba între ✅ și ❌."},
-            {q: "📲 Trimitere WhatsApp", a: "Butonul verde generează un raport și deschide automat WhatsApp."},
-            {q: "📅 Perioadă", a: "Alege 'Cantitate' pentru numărul de săptămâni și 'Săptămâni' pentru start."},
-            {q: "🎭 Mod Eveniment", a: "Dacă este activat, selectoarele de săptămâni vor fi ascunse."},
-            {q: "📂 Istoric", a: "Verifică ultimele 6 rapoarte la sfârșitul paginii. Folosește 'ȘTERGE'."},
-            {q: "🗓️ Extra", a: "Albastru: Adaugă în calendar. Gri: Trimite link-ul aplicației."},
-            {q: "⚙️ Admin", a: "Apasă lung pe logo timp de 3 secunde pentru setări."},
-            {q: "🎧 Suporte", a: "Ajutor tehnic? Apasă pe link-ul din subsol pentru Valtail Solutions."}
+            {q: "📍 Cum se marchează zilele?", a: "Atingeți orice rând pentru a comuta între ✅ (Disponibil) și ❌ (Indisponibil)."},
+            {q: "📲 Trimite pe WhatsApp", a: "Butonul verde generează un raport gata de trimis pe WhatsApp."},
+            {q: "📅 Alegerea perioadei", a: "La 'Cantitate' alegeți numărul de săptămâni. La 'Săptămâni' alegeți începutul."},
+            {q: "🎭 Mod Eveniment", a: "Dacă este activ, aplicația se concentrează doar pe acel eveniment."},
+            {q: "📂 Istoric", a: "Consultați ultimele 6 trimiteri în josul paginii. Folosiți 'ȘTERGE'."},
+            {q: "🗓️ Extras", a: "Albastru: Agenda personală. Gri: Trimite link-ul aplicației."},
+            {q: "⚙️ Admin", a: "Apăsați lung pe logo timp de 3 secunde pentru setări."},
+            {q: "🎧 Suport", a: "Întrebări? Contactați Valtail Solutions prin link-ul de suport."}
         ]
     }
 };
 
-let config = { appName: "Weekly Availability", iconInitials: "SBL", mainColor: "#0077cc", accentColor: "#0055aa", waLang: "en", startDay: 1, maxWeeks: 3, customName: "", showCalendar: true };
+let config = { appName: "Weekly Availability", iconInitials: "SBL", mainColor: "#0077cc", accentColor: "#0055aa", waLang: "pt", startDay: 0, maxWeeks: 3, customName: "", showCalendar: true };
 let curLang = 'pt';
 let history = [];
 let selections = {};
@@ -219,6 +217,7 @@ function init() {
     const savedHist = localStorage.getItem('_v_hist_smart_v4'); if (savedHist) history = JSON.parse(savedHist);
     const savedSels = localStorage.getItem('_v_sels'); if (savedSels) selections = JSON.parse(savedSels);
     document.getElementById('langSelect').value = curLang;
+
     applyStyles(); populateSelectors(); updateUI();
 }
 
@@ -230,7 +229,8 @@ function applyStyles() {
 }
 
 function updateUI() {
-    const l = LANGS[curLang];
+    const l = LANGS[curLang] || LANGS['pt'];
+    
     document.getElementById('sendBtn').textContent = l.send;
     document.getElementById('calBtn').textContent = l.cal;
     document.getElementById('shareBtn').textContent = l.share;
@@ -260,7 +260,7 @@ function getCurrentISOWeek() {
 }
 
 function populateSelectors() {
-    const l = LANGS[curLang];
+    const l = LANGS[curLang] || LANGS['pt'];
     const qSel = document.getElementById('weekSelect'); qSel.innerHTML = "";
     for(let i=1; i<=config.maxWeeks; i++) qSel.innerHTML += `<option value="${i}">${i} ${l.week}${i>1?'s':''}</option>`;
     
@@ -285,8 +285,9 @@ function renderWeeks() {
     const container = document.getElementById("weeksContainer"); container.innerHTML = "";
     const qty = config.customName ? 1 : parseInt(document.getElementById("weekSelect").value);
     const startW = config.customName ? (getCurrentISOWeek() + 1) : parseInt(document.getElementById("startWeekJump").value);
-    const l = LANGS[curLang];
-    let dayIndices = config.startDay == 1 ? [1, 2, 3, 4, 5, 6, 0] : [0, 1, 2, 3, 4, 5, 6];
+    const l = LANGS[curLang] || LANGS['pt'];
+    
+    let dayIndices = config.startDay == 0 ? [0, 1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5, 6, 0];
 
     document.getElementById('mainSelectors').style.display = config.customName ? 'none' : 'grid';
 
@@ -352,17 +353,17 @@ document.getElementById('saveConfig').onclick = () => {
 };
 
 document.getElementById('sendBtn').onclick = () => {
-    const waL = LANGS[config.waLang];
-    let msg = `*${config.appName}*\n\n✅ ${waL.avail} | ❌ ${waL.unavail}\n\n`;
+    const l = LANGS[curLang] || LANGS['pt'];
+    let msg = `*${config.appName}*\n\n✅ ${l.avail} | ❌ ${l.unavail}\n\n`;
     document.querySelectorAll('.week-group').forEach((g) => {
         const weekNum = g.querySelector('.week-title').getAttribute('data-week-num');
-        const titleText = config.customName ? config.customName : `${waL.week} ${weekNum}`;
+        const titleText = config.customName ? config.customName : `${l.week} ${weekNum}`;
         msg += `*${titleText}*\n\n`;
         g.querySelectorAll('.day-row').forEach(r => {
             const date = r.querySelector('.day-date-value').innerText;
             const currentDayName = r.querySelector('.day-name-cell').innerText;
-            const dayIndex = LANGS[curLang].days.indexOf(currentDayName);
-            msg += `${r.querySelector('.status-cell').textContent}  ${date}  ${waL.days[dayIndex]}\n`;
+            const dayIndex = l.days.indexOf(currentDayName);
+            msg += `${r.querySelector('.status-cell').textContent}  ${date}  ${l.days[dayIndex]}\n`;
         });
         msg += `\n`;
     });
@@ -398,7 +399,7 @@ document.getElementById('calBtn').onclick = () => window.open(`https://calendar.
 
 function openModal(id) { document.getElementById(id).style.display = 'flex'; }
 function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-function changeLang(v) { curLang = v; localStorage.setItem('_v_lang', v); location.reload(); }
+function changeLang(v) { curLang = v; localStorage.setItem('_v_lang', v); updateUI(); populateSelectors(); }
 
 window.onload = init;
 </script>
