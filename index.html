@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>SBL Availability 2026 - Dynamic Selectors</title>
+<title>SBL Availability 2026 - Next Week Logic</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
@@ -225,7 +225,6 @@ function updateUI() {
     setupLogo(); renderWeeks(); renderHistory();
 }
 
-// FUNÇÃO PARA PEGAR A SEMANA ISO ATUAL DINAMICAMENTE
 function getCurrentISOWeek() {
     const now = new Date();
     const startOfYear = new Date(now.getFullYear(), 0, 1);
@@ -237,21 +236,20 @@ function populateSelectors() {
     const l = LANGS[curLang];
     const term = config.weekTerm || l.week;
     
-    // QTY SELECTOR: Respeita o maxWeeks do Admin
     const qSel = document.getElementById('weekSelect'); qSel.innerHTML = "";
     for(let i=1; i<=config.maxWeeks; i++) {
         qSel.innerHTML += `<option value="${i}">${i} ${term}${i>1?'s':''}</option>`;
     }
     qSel.value = "1";
 
-    // JUMP SELECTOR: Atualiza conforme a semana real e limita pela quantidade do Admin
-    const currentWeek = getCurrentISOWeek();
+    // PULA A SEMANA ATUAL (+1)
+    const nextWeek = getCurrentISOWeek() + 1;
     const jSel = document.getElementById('startWeekJump'); jSel.innerHTML = "";
     for(let i=0; i<config.maxWeeks; i++) {
-        const wNum = currentWeek + i;
+        const wNum = nextWeek + i;
         jSel.innerHTML += `<option value="${wNum}">${term} ${wNum}</option>`;
     }
-    jSel.value = currentWeek;
+    jSel.value = nextWeek;
 }
 
 function getDateOfISOWeek(w, dayIndex, year) {
@@ -266,7 +264,10 @@ function getDateOfISOWeek(w, dayIndex, year) {
 function renderWeeks() {
     const container = document.getElementById("weeksContainer"); container.innerHTML = "";
     const qty = config.customName ? 1 : parseInt(document.getElementById("weekSelect").value);
-    const startW = config.customName ? getCurrentISOWeek() : parseInt(document.getElementById("startWeekJump").value);
+    
+    // RENDERIZA A PARTIR DA PRÓXIMA SEMANA (+1)
+    const startW = config.customName ? (getCurrentISOWeek() + 1) : parseInt(document.getElementById("startWeekJump").value);
+    
     const l = LANGS[curLang];
     const term = config.weekTerm || l.week;
     let dayIndices = config.startDay == 1 ? [1, 2, 3, 4, 5, 6, 0] : [0, 1, 2, 3, 4, 5, 6];
