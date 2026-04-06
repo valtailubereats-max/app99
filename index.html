@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>SBL Availability 2026 - Date Logic Fix</title>
+<title>SBL Availability 2026 - Dynamic Selectors</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
@@ -116,7 +116,7 @@
             <input type="text" id="cfgIconInitials" class="admin-input" placeholder="Iniciais Logo">
             <input type="text" id="cfgCustomName" class="admin-input" placeholder="Nome Específico (Modo Evento)">
             <select id="cfgWaLang" class="admin-input"><option value="pt">WhatsApp: PT</option><option value="en">WhatsApp: EN</option><option value="ro">WhatsApp: RO</option></select>
-            <input type="number" id="cfgMaxWeeks" class="admin-input" min="1" max="3" placeholder="Máx Semanas">
+            <input type="number" id="cfgMaxWeeks" class="admin-input" min="1" max="10" placeholder="Máx Semanas">
             <input type="color" id="cfgMainColor" class="admin-input" style="height:45px;">
             <input type="color" id="cfgAccentColor" class="admin-input" style="height:45px;">
             <select id="cfgStartDay" class="admin-input"><option value="1">Início: Segunda</option><option value="0">Início: Domingo</option></select>
@@ -225,44 +225,50 @@ function updateUI() {
     setupLogo(); renderWeeks(); renderHistory();
 }
 
+// FUNÇÃO PARA PEGAR A SEMANA ISO ATUAL DINAMICAMENTE
+function getCurrentISOWeek() {
+    const now = new Date();
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+    const days = Math.floor((now - startOfYear) / (24 * 60 * 60 * 1000));
+    return Math.ceil((days + startOfYear.getDay() + 1) / 7);
+}
+
 function populateSelectors() {
     const l = LANGS[curLang];
     const term = config.weekTerm || l.week;
+    
+    // QTY SELECTOR: Respeita o maxWeeks do Admin
     const qSel = document.getElementById('weekSelect'); qSel.innerHTML = "";
-    for(let i=1; i<=Math.min(config.maxWeeks, 3); i++) qSel.innerHTML += `<option value="${i}">${i} ${term}${i>1?'s':''}</option>`;
+    for(let i=1; i<=config.maxWeeks; i++) {
+        qSel.innerHTML += `<option value="${i}">${i} ${term}${i>1?'s':''}</option>`;
+    }
     qSel.value = "1";
 
+    // JUMP SELECTOR: Atualiza conforme a semana real e limita pela quantidade do Admin
+    const currentWeek = getCurrentISOWeek();
     const jSel = document.getElementById('startWeekJump'); jSel.innerHTML = "";
-    [14, 15, 16, 17].forEach(w => jSel.innerHTML += `<option value="${w}">${term} ${w}</option>`);
-    jSel.value = "15";
+    for(let i=0; i<config.maxWeeks; i++) {
+        const wNum = currentWeek + i;
+        jSel.innerHTML += `<option value="${wNum}">${term} ${wNum}</option>`;
+    }
+    jSel.value = currentWeek;
 }
 
-// CORREÇÃO DA LÓGICA DE DATAS CRONOLÓGICAS
 function getDateOfISOWeek(w, dayIndex, year) {
     let simple = new Date(year, 0, 1 + (w - 1) * 7);
     let ISOweekStart = simple;
     ISOweekStart.setDate(simple.getDate() - (simple.getDay() || 7) + 1);
-    
-    // Se o Admin diz que a semana começa no Domingo (0), 
-    // recuamos a base ISO (que é Segunda) em 1 dia.
-    if(config.startDay == 0) {
-        ISOweekStart.setDate(ISOweekStart.getDate() - 1);
-    }
-    
+    if(config.startDay == 0) ISOweekStart.setDate(ISOweekStart.getDate() - 1);
     let target = new Date(ISOweekStart);
-    // Ajusta o offset baseado no índice do dia da semana escolhido para exibição
-    // No grid renderWeeks, o dia 1 da lista será sempre o ISOweekStart corrigido.
     return target;
 }
 
 function renderWeeks() {
     const container = document.getElementById("weeksContainer"); container.innerHTML = "";
     const qty = config.customName ? 1 : parseInt(document.getElementById("weekSelect").value);
-    const startW = config.customName ? 15 : parseInt(document.getElementById("startWeekJump").value);
+    const startW = config.customName ? getCurrentISOWeek() : parseInt(document.getElementById("startWeekJump").value);
     const l = LANGS[curLang];
     const term = config.weekTerm || l.week;
-    
-    // Ordem visual dos dias conforme Admin
     let dayIndices = config.startDay == 1 ? [1, 2, 3, 4, 5, 6, 0] : [0, 1, 2, 3, 4, 5, 6];
 
     document.getElementById('mainSelectors').style.display = config.customName ? 'none' : 'grid';
@@ -273,14 +279,11 @@ function renderWeeks() {
         const titleText = config.customName ? config.customName : `${term} ${targetW}`;
         group.innerHTML = `<div class="week-title" data-week-num="${targetW}" data-week-id="${titleText}">${titleText}</div>`;
         
-        // Base da data para esta semana específica
         let weekBaseDate = getDateOfISOWeek(targetW, 0, 2026);
 
         dayIndices.forEach((idx, offset) => {
-            // A data avança cronologicamente conforme a posição na lista (0 a 6)
             let dateObj = new Date(weekBaseDate);
             dateObj.setDate(weekBaseDate.getDate() + offset);
-
             const dStr = String(dateObj.getDate()).padStart(2, '0') + '/' + String(dateObj.getMonth() + 1).padStart(2, '0');
             const dayId = `${targetW}-${idx}`;
             const currentStatus = selections[dayId] || "✅";
@@ -325,7 +328,7 @@ document.getElementById('saveConfig').onclick = () => {
     config.iconInitials = document.getElementById('cfgIconInitials').value;
     config.customName = document.getElementById('cfgCustomName').value;
     config.waLang = document.getElementById('cfgWaLang').value;
-    config.maxWeeks = Math.min(parseInt(document.getElementById('cfgMaxWeeks').value), 3);
+    config.maxWeeks = parseInt(document.getElementById('cfgMaxWeeks').value);
     config.mainColor = document.getElementById('cfgMainColor').value;
     config.accentColor = document.getElementById('cfgAccentColor').value;
     config.startDay = parseInt(document.getElementById('cfgStartDay').value);
@@ -339,7 +342,7 @@ document.getElementById('sendBtn').onclick = () => {
     const waL = LANGS[config.waLang];
     const waTerm = config.weekTerm || waL.week;
     let msg = `*${config.appName}*\n\n✅ ${waL.avail} | ❌ ${waL.unavail}\n\n`;
-    let primaryWeekId = ""; let isFuture = false; const currentWeekNum = 15; 
+    let primaryWeekId = ""; let isFuture = false; const currentWeekNum = getCurrentISOWeek(); 
 
     document.querySelectorAll('.week-group').forEach((g, i) => {
         const weekNum = parseInt(g.querySelector('.week-title').getAttribute('data-week-num'));
