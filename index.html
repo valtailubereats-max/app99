@@ -6,9 +6,12 @@
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="SBL Availability">
+<meta name="apple-mobile-web-app-title" content="SBL 2026">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%230077cc%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22 font-size=%2235%22 dy=%22.3em%22>SBL</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230077cc%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22bold%22 font-size=%2235%22 dy=%22.3em%22>SBL</text></svg>">
 
 <style>
   :root { 
@@ -22,7 +25,6 @@
   }
   .app-container { max-width: 450px; margin: 0 auto; position: relative; padding-bottom: 30px; }
   
-  /* HEADER E LOGO CIRCULAR */
   .header-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 10px 5px; }
   .logo-circle {
     width: 60px; height: 60px; background: var(--primary-color); 
@@ -44,14 +46,12 @@
   
   h1 { color: var(--primary-color); margin: 0 0 15px; font-size: 24px; font-weight: 800; }
   
-  /* GRID E INPUTS */
   .selectors-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
   select, .admin-input { padding:12px; font-size:14px; border-radius: 12px; width: 100%; background: white; border: 1px solid #ddd; font-weight: 600; box-sizing: border-box; outline:none; }
   .label-mini { font-size: 9px; font-weight: 800; color: #999; text-align: left; display: block; margin-bottom: 4px; text-transform: uppercase; }
   
   .legend-box { display: flex; justify-content: center; gap: 20px; margin: 15px 0; padding: 10px; background: #fff; border-radius: 12px; font-size: 13px; font-weight: 700; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
   
-  /* LISTA DE DIAS */
   .week-group { margin-bottom: 25px; text-align: left; }
   .week-title { text-align: center; font-weight: 700; color: var(--accent-color); margin: 20px 0 10px; display: flex; align-items: center; justify-content: center; gap: 8px; font-style: italic; }
   .day-row { display: grid; grid-template-columns: 1.6fr 1fr 0.6fr; align-items: center; padding: 12px 15px; background: #fff; margin-bottom: 8px; border-radius: 15px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
@@ -59,15 +59,12 @@
   .day-name-cell { text-align: left; font-weight: 700; font-size: 17px; }
   .day-date-value { font-size: 13px; font-weight: 800; color: var(--primary-color); }
   
-  /* BOTÕES */
   .btn { width: 100%; padding: 16px; border: none; border-radius: 15px; color: #fff; font-weight: 800; font-size: 15px; cursor: pointer; margin-top: 10px; transition: opacity 0.2s; }
   
-  /* HISTÓRICO */
   .history-card { background: #fff; border-radius: 15px; padding: 15px; margin-top: 15px; border-left: 5px solid var(--success); text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
   .history-time { font-size: 11px; font-weight: 800; color: var(--primary-color); display: block; margin-bottom: 5px; }
   .history-body { font-family: monospace; font-size: 11px; white-space: pre-wrap; color: #555; line-height: 1.3; }
 
-  /* FOOTER */
   .footer-credits { margin-top: 40px; padding: 20px 0; border-top: 1px solid #eee; display: flex; flex-direction: column; align-items: center; gap: 10px; }
   .footer-text { font-size: 10px; font-weight: 900; color: #ccc; letter-spacing: 2px; text-transform: uppercase; }
   .support-link {
@@ -76,7 +73,6 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eee;
   }
 
-  /* MODAIS */
   .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
   .modal-content { background: white; border-radius: 20px; width: 90%; max-width: 420px; padding: 25px; box-sizing: border-box; max-height: 85vh; overflow-y: auto; position: relative; }
   
@@ -207,7 +203,7 @@ const LANGS = {
             {q: "📂 Istoric", a: "Verifică ultimele 6 rapoarte la sfârșitul paginii. Folosește 'ȘTERGE'."},
             {q: "🗓️ Extra", a: "Albastru: Adaugă în calendar. Gri: Trimite link-ul aplicației."},
             {q: "⚙️ Admin", a: "Apasă lung pe logo timp de 3 secunde pentru setări."},
-            {q: "🎧 Suport", a: "Ajutor tehnic? Apasă pe link-ul din subsol pentru Valtail Solutions."}
+            {q: "🎧 Suporte", a: "Ajutor tehnic? Apasă pe link-ul din subsol pentru Valtail Solutions."}
         ]
     }
 };
