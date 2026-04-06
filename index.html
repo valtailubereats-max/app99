@@ -15,7 +15,7 @@
     background: var(--bg-gray); text-align:center; padding:15px; color: #333; margin:0; 
     user-select: none; -webkit-user-select: none;
   }
-  .app-container { max-width: 450px; margin: 0 auto; position: relative; }
+  .app-container { max-width: 450px; margin: 0 auto; position: relative; padding-bottom: 50px; }
   .header-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 10px 5px; }
   .logo-circle {
     width: 60px; height: 60px; background: var(--primary-color); 
@@ -53,6 +53,16 @@
   .history-card { background: #fff; border-radius: 15px; padding: 15px; margin-top: 15px; border-left: 5px solid var(--success); text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
   .history-time { font-size: 11px; font-weight: 800; color: var(--primary-color); display: block; margin-bottom: 5px; }
   .history-body { font-family: monospace; font-size: 11px; white-space: pre-wrap; color: #555; line-height: 1.3; }
+
+  .footer-credits { margin-top: 40px; padding: 20px 0; border-top: 1px solid #eee; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .footer-text { font-size: 10px; font-weight: 900; color: #ccc; letter-spacing: 2px; text-transform: uppercase; }
+  .support-link {
+    display: flex; align-items: center; gap: 8px; background: #fff; padding: 8px 15px; 
+    border-radius: 20px; text-decoration: none; color: #555; font-size: 12px; font-weight: 800;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eee; transition: all 0.3s;
+  }
+  .support-link:hover { background: var(--bg-gray); transform: translateY(-2px); }
+  .support-icon { font-size: 16px; }
 
   .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
   .modal-content { background: white; border-radius: 20px; width: 90%; max-width: 400px; padding: 20px; box-sizing: border-box; max-height: 85vh; overflow-y: auto; position: relative; }
@@ -101,6 +111,13 @@
         </div>
         <div id="historyList"></div>
     </div>
+
+    <footer class="footer-credits">
+        <div class="footer-text">Valtail Solutions</div>
+        <a href="https://wa.me/4407508309536?text=Olá! Preciso de suporte com o App de Disponibilidade." target="_blank" class="support-link">
+            <span class="support-icon">🎧</span> <span id="lblSupport">Suporte</span>
+        </a>
+    </footer>
 </div>
 
 <div id="faqModal" class="modal">
@@ -137,37 +154,33 @@
 <script>
 const LANGS = {
     pt: { 
-        send: "Enviar via WhatsApp", cal: "Calendário", share: "Partilhar", qty: "Quantidade", jump: "Semanas", date: "DATA", week: "Semana", avail: "Disponível", unavail: "Indisponível", history: "RELATÓRIOS RECENTES", clear: "LIMPAR", faqT: "FAQ - Ajuda", days: ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"],
+        send: "Enviar via WhatsApp", cal: "Calendário", share: "Partilhar", qty: "Quantidade", jump: "Semanas", date: "DATA", week: "Semana", avail: "Disponível", unavail: "Indisponível", history: "RELATÓRIOS RECENTES", clear: "LIMPAR", faqT: "FAQ - Ajuda", support: "Suporte", days: ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"],
         faq: [
             {q: "Como marcar disponibilidade?", a: "Toque em qualquer dia da lista para alternar entre Disponível (✅) e Indisponível (❌)."},
             {q: "Como enviar para o WhatsApp?", a: "Clique no botão verde 'Enviar via WhatsApp'. O texto será gerado no idioma configurado no Admin."},
             {q: "O que é o Modo Evento?", a: "No Admin, preencha 'Nome Específico' para focar apenas em um evento. Isso oculta seletores de semanas."},
             {q: "Como acessar o Painel Admin?", a: "Mantenha o dedo pressionado no logo circular por 3 segundos."},
-            {q: "Como ver o Histórico?", a: "Os últimos 6 relatórios aparecem no fundo da tela após o primeiro envio."},
-            {q: "Como mudar as cores?", a: "Acesse o Painel Admin e use os seletores de cor para personalizar o visual."}
+            {q: "Como ver o Histórico?", a: "Os últimos 6 relatórios aparecem no fundo da tela após o primeiro envio."}
         ]
     },
     en: { 
-        send: "Send via WhatsApp", cal: "Calendar", share: "Share", qty: "Quantity", jump: "Weeks", date: "DATE", week: "Week", avail: "Available", unavail: "Unavailable", history: "RECENT REPORTS", clear: "CLEAR", faqT: "FAQ - Help", days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        send: "Send via WhatsApp", cal: "Calendar", share: "Share", qty: "Quantity", jump: "Weeks", date: "DATE", week: "Week", avail: "Available", unavail: "Unavailable", history: "RECENT REPORTS", clear: "CLEAR", faqT: "FAQ - Help", support: "Support", days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         faq: [
             {q: "How to mark availability?", a: "Tap any day to toggle between Available (✅) and Unavailable (❌)."},
             {q: "How to send to WhatsApp?", a: "Click the green 'Send via WhatsApp' button. Text is generated in the language set in Admin."},
             {q: "What is Event Mode?", a: "In Admin, fill 'Specific Name' to focus only on that event."},
-            {q: "How to access Admin?", a: "Long press the circular logo for 3 seconds."},
-            {q: "How to change colors?", a: "Access the Admin Panel and use color pickers to customize."}
+            {q: "How to access Admin?", a: "Long press the circular logo for 3 seconds."}
         ]
     },
     ro: { 
-        send: "Trimite prin WhatsApp", cal: "Calendar", share: "Partajează", qty: "Cantitate", jump: "Săptămâni", date: "DATA", week: "Săptămână", avail: "Disponibil", unavail: "Indisponibil", history: "RAPOARTE RECENTE", clear: "ȘTERGE", faqT: "FAQ - Ajutor", days: ["Duminică", "Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă"],
+        send: "Trimite prin WhatsApp", cal: "Calendar", share: "Partajează", qty: "Cantitate", jump: "Săptămâni", date: "DATA", week: "Săptămână", avail: "Disponibil", unavail: "Indisponibil", history: "RAPOARTE RECENTE", clear: "ȘTERGE", faqT: "FAQ - Ajutor", support: "Suport", days: ["Duminică", "Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă"],
         faq: [
-            {q: "Cum marchez disponibilitatea?", a: "Atinge orice zi pentru a schimba între Disponibil (✅) și Indisponibil (❌)."},
-            {q: "Trimitere WhatsApp?", a: "Apasă butonul verde 'Trimite prin WhatsApp'. Respectă limba setată în Admin."},
+            {q: "Como marchez disponibilitatea?", a: "Atinge orice zi pentru a schimba între Disponibil (✅) și Indisponibil (❌)."},
             {q: "Acces Panou Admin?", a: "Apasă lung pe logo-ul circular timp de 3 secunde."}
         ]
     }
 };
 
-// Configuração inicial sem o campo 'weekTerm'
 let config = { appName: "Weekly Availability", iconInitials: "SBL", mainColor: "#0077cc", accentColor: "#0055aa", waLang: "en", startDay: 1, maxWeeks: 3, customName: "", showCalendar: true };
 let curLang = 'pt';
 let history = [];
@@ -199,6 +212,7 @@ function updateUI() {
     document.getElementById('lblHistory').textContent = l.history;
     document.getElementById('clearHistoryBtn').textContent = l.clear;
     document.getElementById('faqTitle').textContent = l.faqT;
+    document.getElementById('lblSupport').textContent = l.support;
     document.getElementById('legAvail').textContent = `✅ ${l.avail}`;
     document.getElementById('legUnavail').textContent = `❌ ${l.unavail}`;
 
@@ -227,7 +241,7 @@ function getCurrentISOWeek() {
 
 function populateSelectors() {
     const l = LANGS[curLang];
-    const term = l.week; // Sempre usa a tradução base
+    const term = l.week;
     
     const qSel = document.getElementById('weekSelect'); qSel.innerHTML = "";
     for(let i=1; i<=config.maxWeeks; i++) {
@@ -352,10 +366,6 @@ document.getElementById('sendBtn').onclick = () => {
     const existingIdx = history.findIndex(h => h.weekId === primaryWeekId);
     if (existingIdx !== -1) history[existingIdx] = { weekId: primaryWeekId, time: now, content: msg, isFuture: isFuture };
     else history.push({ weekId: primaryWeekId, time: now, content: msg, isFuture: isFuture });
-
-    const past = history.filter(h => !h.isFuture).slice(-3);
-    const future = history.filter(h => h.isFuture).slice(-3);
-    history = [...past, ...future];
 
     localStorage.setItem('_v_hist_smart_v4', JSON.stringify(history));
     renderHistory();
