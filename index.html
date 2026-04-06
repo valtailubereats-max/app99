@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>SBL Availability 2026 - FAQ Style Update</title>
+<title>SBL Availability 2026 - Date Logic Fix</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
@@ -237,12 +237,21 @@ function populateSelectors() {
     jSel.value = "15";
 }
 
+// CORREÇÃO DA LÓGICA DE DATAS CRONOLÓGICAS
 function getDateOfISOWeek(w, dayIndex, year) {
     let simple = new Date(year, 0, 1 + (w - 1) * 7);
     let ISOweekStart = simple;
     ISOweekStart.setDate(simple.getDate() - (simple.getDay() || 7) + 1);
+    
+    // Se o Admin diz que a semana começa no Domingo (0), 
+    // recuamos a base ISO (que é Segunda) em 1 dia.
+    if(config.startDay == 0) {
+        ISOweekStart.setDate(ISOweekStart.getDate() - 1);
+    }
+    
     let target = new Date(ISOweekStart);
-    target.setDate(ISOweekStart.getDate() + (dayIndex == 0 ? 6 : dayIndex - 1));
+    // Ajusta o offset baseado no índice do dia da semana escolhido para exibição
+    // No grid renderWeeks, o dia 1 da lista será sempre o ISOweekStart corrigido.
     return target;
 }
 
@@ -252,6 +261,8 @@ function renderWeeks() {
     const startW = config.customName ? 15 : parseInt(document.getElementById("startWeekJump").value);
     const l = LANGS[curLang];
     const term = config.weekTerm || l.week;
+    
+    // Ordem visual dos dias conforme Admin
     let dayIndices = config.startDay == 1 ? [1, 2, 3, 4, 5, 6, 0] : [0, 1, 2, 3, 4, 5, 6];
 
     document.getElementById('mainSelectors').style.display = config.customName ? 'none' : 'grid';
@@ -262,8 +273,14 @@ function renderWeeks() {
         const titleText = config.customName ? config.customName : `${term} ${targetW}`;
         group.innerHTML = `<div class="week-title" data-week-num="${targetW}" data-week-id="${titleText}">${titleText}</div>`;
         
-        dayIndices.forEach((idx) => {
-            const dateObj = getDateOfISOWeek(targetW, idx, 2026);
+        // Base da data para esta semana específica
+        let weekBaseDate = getDateOfISOWeek(targetW, 0, 2026);
+
+        dayIndices.forEach((idx, offset) => {
+            // A data avança cronologicamente conforme a posição na lista (0 a 6)
+            let dateObj = new Date(weekBaseDate);
+            dateObj.setDate(weekBaseDate.getDate() + offset);
+
             const dStr = String(dateObj.getDate()).padStart(2, '0') + '/' + String(dateObj.getMonth() + 1).padStart(2, '0');
             const dayId = `${targetW}-${idx}`;
             const currentStatus = selections[dayId] || "✅";
@@ -337,7 +354,7 @@ document.getElementById('sendBtn').onclick = () => {
         });
         msg += `\n`;
     });
-    msg += `_powered by valtail solutions_`;
+    msg += `\n_powered by valtail solutions_`;
 
     const now = new Date().toLocaleString();
     const existingIdx = history.findIndex(h => h.weekId === primaryWeekId);
