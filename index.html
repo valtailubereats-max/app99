@@ -2,7 +2,12 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>SBL Availability 2026 - Valtail Solutions</title>
+<title>SBL Availability 2026</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SBL Availability">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
@@ -17,7 +22,7 @@
   }
   .app-container { max-width: 450px; margin: 0 auto; position: relative; padding-bottom: 30px; }
   
-  /* HEADER E LOGO */
+  /* HEADER E LOGO CIRCULAR */
   .header-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 10px 5px; }
   .logo-circle {
     width: 60px; height: 60px; background: var(--primary-color); 
@@ -26,6 +31,7 @@
     font-weight: 800; font-size: 18px; cursor: pointer;
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     transition: transform 0.2s;
+    flex-shrink: 0;
   }
   .logo-circle:active { transform: scale(0.95); }
   
@@ -74,7 +80,6 @@
   .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
   .modal-content { background: white; border-radius: 20px; width: 90%; max-width: 420px; padding: 25px; box-sizing: border-box; max-height: 85vh; overflow-y: auto; position: relative; }
   
-  /* BOTÃO X PARA FECHAR */
   .close-x {
     position: absolute; top: 15px; right: 15px; width: 30px; height: 30px;
     background: #f0f0f0; border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -137,7 +142,7 @@
 <div id="faqModal" class="modal">
     <div class="modal-content">
         <div class="close-x" onclick="closeModal('faqModal')">×</div>
-        <h2 id="faqTitle" style="color:var(--primary-color); margin-top:0; font-size: 20px; padding-right: 30px; text-align: left;">Manual de Uso</h2>
+        <h2 id="faqTitle" style="color:var(--primary-color); margin-top:0; font-size: 20px; text-align: left;">Manual de Uso</h2>
         <div id="faqContent"></div>
     </div>
 </div>
@@ -155,10 +160,9 @@
             <input type="color" id="cfgMainColor" class="admin-input" style="height:45px;">
             <input type="color" id="cfgAccentColor" class="admin-input" style="height:45px;">
             <select id="cfgStartDay" class="admin-input"><option value="1">Início: Segunda</option><option value="0">Início: Domingo</option></select>
-            
             <div style="display:flex; align-items:center; background:#eee; padding:10px; border-radius:12px; justify-content: space-between;">
                 <span style="font-size:12px; font-weight:800; color:#555;">MOSTRAR CALENDÁRIO</span>
-                <input type="checkbox" id="cfgShowCal" style="width:22px; height:22px;">
+                <input type="checkbox" id="cfgShowCal">
             </div>
         </div>
         <button id="saveConfig" class="btn" style="background:black; margin-top:15px;">Salvar Alterações</button>
