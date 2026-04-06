@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>SBL Availability 2026 - Next Week Logic</title>
+<title>SBL Availability 2026 - Versão Final</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
@@ -23,7 +23,10 @@
     display: flex; align-items: center; justify-content: center;
     font-weight: 800; font-size: 18px; cursor: pointer;
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
   }
+  .logo-circle:active { transform: scale(0.95); }
+  
   .lang-box {
     position: absolute; top: 10px; right: 10px; background: white;
     border: 1px solid #ddd; border-radius: 12px; padding: 2px 8px;
@@ -120,7 +123,6 @@
             <input type="color" id="cfgMainColor" class="admin-input" style="height:45px;">
             <input type="color" id="cfgAccentColor" class="admin-input" style="height:45px;">
             <select id="cfgStartDay" class="admin-input"><option value="1">Início: Segunda</option><option value="0">Início: Domingo</option></select>
-            <input type="text" id="cfgWeekTerm" class="admin-input" placeholder="Termo Semana">
             
             <div style="display:flex; align-items:center; background:#eee; padding:10px; border-radius:12px; justify-content: space-between;">
                 <span style="font-size:12px; font-weight:800; color:#555;">MOSTRAR CALENDÁRIO</span>
@@ -139,12 +141,10 @@ const LANGS = {
         faq: [
             {q: "Como marcar disponibilidade?", a: "Toque em qualquer dia da lista para alternar entre Disponível (✅) e Indisponível (❌)."},
             {q: "Como enviar para o WhatsApp?", a: "Clique no botão verde 'Enviar via WhatsApp'. O texto será gerado no idioma configurado no Admin."},
-            {q: "O que é o Modo Evento?", a: "No Admin, se preencher 'Nome Específico', o app foca apenas nessa descrição, ocultando seletores de semanas."},
+            {q: "O que é o Modo Evento?", a: "No Admin, preencha 'Nome Específico' para focar apenas em um evento. Isso oculta seletores de semanas."},
             {q: "Como acessar o Painel Admin?", a: "Mantenha o dedo pressionado no logo circular por 3 segundos."},
-            {q: "Como ver o Histórico?", a: "Os últimos 6 relatórios (3 passados/3 futuros) aparecem no fundo da tela após o primeiro envio."},
-            {q: "O título da semana não traduz?", a: "O título segue o 'Idioma WhatsApp' definido no Admin, independente do idioma do app."},
-            {q: "Como mudar as cores?", a: "Acesse o Painel Admin e use os seletores de cor para personalizar o visual."},
-            {q: "Onde os dados são salvos?", a: "Tudo é salvo localmente no seu navegador/telemóvel. Limpar o cache remove as configurações."}
+            {q: "Como ver o Histórico?", a: "Os últimos 6 relatórios aparecem no fundo da tela após o primeiro envio."},
+            {q: "Como mudar as cores?", a: "Acesse o Painel Admin e use os seletores de cor para personalizar o visual."}
         ]
     },
     en: { 
@@ -152,30 +152,23 @@ const LANGS = {
         faq: [
             {q: "How to mark availability?", a: "Tap any day to toggle between Available (✅) and Unavailable (❌)."},
             {q: "How to send to WhatsApp?", a: "Click the green 'Send via WhatsApp' button. Text is generated in the language set in Admin."},
-            {q: "What is Event Mode?", a: "In Admin, if you fill 'Specific Name', the app focuses only on that event."},
+            {q: "What is Event Mode?", a: "In Admin, fill 'Specific Name' to focus only on that event."},
             {q: "How to access Admin?", a: "Long press the circular logo for 3 seconds."},
-            {q: "How to see History?", a: "The last 6 reports (3 past/3 future) appear at the bottom after the first send."},
-            {q: "Week title not translating?", a: "The title follows the 'WhatsApp Language' set in Admin."},
-            {q: "How to change colors?", a: "Access the Admin Panel and use color pickers to customize."},
-            {q: "Where is data saved?", a: "Everything is saved locally on your device. Clearing cache removes settings."}
+            {q: "How to change colors?", a: "Access the Admin Panel and use color pickers to customize."}
         ]
     },
     ro: { 
         send: "Trimite prin WhatsApp", cal: "Calendar", share: "Partajează", qty: "Cantitate", jump: "Săptămâni", date: "DATA", week: "Săptămână", avail: "Disponibil", unavail: "Indisponibil", history: "RAPOARTE RECENTE", clear: "ȘTERGE", faqT: "FAQ - Ajutor", days: ["Duminică", "Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă"],
         faq: [
             {q: "Cum marchez disponibilitatea?", a: "Atinge orice zi pentru a schimba între Disponibil (✅) și Indisponibil (❌)."},
-            {q: "Trimitere WhatsApp?", a: "Apasă butonul verde 'Trimite prin WhatsApp'. Textul respectă limba setată în Admin."},
-            {q: "Ce este Modul Eveniment?", a: "În Admin, dacă completezi 'Nume Specific', aplicația se concentrează doar pe acel eveniment."},
-            {q: "Acces Panou Admin?", a: "Apasă lung pe logo-ul circular timp de 3 secunde."},
-            {q: "Unde este Istoricul?", a: "Ultimele 6 rapoarte apar în josul paginii după prima trimitere."},
-            {q: "Titlul nu se traduce?", a: "Titlul urmează setarea 'Limba WhatsApp' din Admin."},
-            {q: "Schimbare culori?", a: "Accesează Panoul Admin și folosește selectorul de culori."},
-            {q: "Unde se salvează datele?", a: "Totul este salvat local în browser. Ștergerea cache-ului va șterge setările."}
+            {q: "Trimitere WhatsApp?", a: "Apasă butonul verde 'Trimite prin WhatsApp'. Respectă limba setată în Admin."},
+            {q: "Acces Panou Admin?", a: "Apasă lung pe logo-ul circular timp de 3 secunde."}
         ]
     }
 };
 
-let config = { appName: "Weekly Availability", iconInitials: "SBL", mainColor: "#0077cc", accentColor: "#0055aa", weekTerm: "", waLang: "en", startDay: 1, maxWeeks: 3, customName: "", showCalendar: true };
+// Configuração inicial sem o campo 'weekTerm'
+let config = { appName: "Weekly Availability", iconInitials: "SBL", mainColor: "#0077cc", accentColor: "#0055aa", waLang: "en", startDay: 1, maxWeeks: 3, customName: "", showCalendar: true };
 let curLang = 'pt';
 let history = [];
 let selections = {};
@@ -234,7 +227,7 @@ function getCurrentISOWeek() {
 
 function populateSelectors() {
     const l = LANGS[curLang];
-    const term = config.weekTerm || l.week;
+    const term = l.week; // Sempre usa a tradução base
     
     const qSel = document.getElementById('weekSelect'); qSel.innerHTML = "";
     for(let i=1; i<=config.maxWeeks; i++) {
@@ -242,7 +235,6 @@ function populateSelectors() {
     }
     qSel.value = "1";
 
-    // PULA A SEMANA ATUAL (+1)
     const nextWeek = getCurrentISOWeek() + 1;
     const jSel = document.getElementById('startWeekJump'); jSel.innerHTML = "";
     for(let i=0; i<config.maxWeeks; i++) {
@@ -264,12 +256,10 @@ function getDateOfISOWeek(w, dayIndex, year) {
 function renderWeeks() {
     const container = document.getElementById("weeksContainer"); container.innerHTML = "";
     const qty = config.customName ? 1 : parseInt(document.getElementById("weekSelect").value);
-    
-    // RENDERIZA A PARTIR DA PRÓXIMA SEMANA (+1)
     const startW = config.customName ? (getCurrentISOWeek() + 1) : parseInt(document.getElementById("startWeekJump").value);
     
     const l = LANGS[curLang];
-    const term = config.weekTerm || l.week;
+    const term = l.week;
     let dayIndices = config.startDay == 1 ? [1, 2, 3, 4, 5, 6, 0] : [0, 1, 2, 3, 4, 5, 6];
 
     document.getElementById('mainSelectors').style.display = config.customName ? 'none' : 'grid';
@@ -319,7 +309,6 @@ function openAdmin() {
     document.getElementById('cfgMainColor').value = config.mainColor;
     document.getElementById('cfgAccentColor').value = config.accentColor;
     document.getElementById('cfgStartDay').value = config.startDay;
-    document.getElementById('cfgWeekTerm').value = config.weekTerm;
     document.getElementById('cfgShowCal').checked = config.showCalendar;
     openModal('adminPanel');
 }
@@ -333,7 +322,6 @@ document.getElementById('saveConfig').onclick = () => {
     config.mainColor = document.getElementById('cfgMainColor').value;
     config.accentColor = document.getElementById('cfgAccentColor').value;
     config.startDay = parseInt(document.getElementById('cfgStartDay').value);
-    config.weekTerm = document.getElementById('cfgWeekTerm').value;
     config.showCalendar = document.getElementById('cfgShowCal').checked;
     localStorage.setItem('_v_cfg_vFinalV8', JSON.stringify(config));
     location.reload();
@@ -341,7 +329,7 @@ document.getElementById('saveConfig').onclick = () => {
 
 document.getElementById('sendBtn').onclick = () => {
     const waL = LANGS[config.waLang];
-    const waTerm = config.weekTerm || waL.week;
+    const waTerm = waL.week;
     let msg = `*${config.appName}*\n\n✅ ${waL.avail} | ❌ ${waL.unavail}\n\n`;
     let primaryWeekId = ""; let isFuture = false; const currentWeekNum = getCurrentISOWeek(); 
 
