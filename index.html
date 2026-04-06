@@ -2,8 +2,9 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>SBL Availability - Mobile Fix</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBL Availability 2026 - FAQ Style Update</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <style>
   :root { 
     --primary-color: #0077cc; --accent-color: #0055aa; --logo-text-color: #ffffff;
@@ -26,47 +27,32 @@
   .lang-box {
     position: absolute; top: 10px; right: 10px; background: white;
     border: 1px solid #ddd; border-radius: 12px; padding: 2px 8px;
-    font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 5px;
-    z-index: 100;
+    font-size: 11px; font-weight: bold; z-index: 100;
   }
-  #langSelect { border: none; background: transparent; font-size: 11px; font-weight: 800; cursor: pointer; outline: none; }
+  #langSelect { border: none; background: transparent; font-size: 11px; font-weight: 800; outline: none; cursor:pointer; }
   h1 { color: var(--primary-color); margin: 0 0 15px; font-size: 24px; font-weight: 800; }
+  
   .selectors-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
   select, .admin-input { padding:12px; font-size:14px; border-radius: 12px; width: 100%; background: white; border: 1px solid #ddd; font-weight: 600; box-sizing: border-box; outline:none; }
   .label-mini { font-size: 9px; font-weight: 800; color: #999; text-align: left; display: block; margin-bottom: 4px; text-transform: uppercase; }
   
-  .legend-box {
-    display: flex; justify-content: center; gap: 20px; 
-    margin: 15px 0; padding: 10px; background: #fff; 
-    border-radius: 12px; font-size: 13px; font-weight: 700;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-  }
-
+  .legend-box { display: flex; justify-content: center; gap: 20px; margin: 15px 0; padding: 10px; background: #fff; border-radius: 12px; font-size: 13px; font-weight: 700; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
   .week-group { margin-bottom: 25px; text-align: left; }
   .week-title { text-align: center; font-weight: 700; color: var(--accent-color); margin: 20px 0 10px; display: flex; align-items: center; justify-content: center; gap: 8px; font-style: italic; }
-  .week-title::before, .week-title::after { content: ""; height: 1px; background: #ccc; flex-grow: 1; }
   
-  .day-row { 
-    display: grid; grid-template-columns: 1.6fr 1fr 0.6fr; 
-    align-items: center; padding: 12px 15px; background: #fff; 
-    margin-bottom: 8px; border-radius: 15px; cursor: pointer; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: background 0.2s, opacity 0.2s;
-  }
-  .status-cell { 
-    font-size: 20px; 
-    min-width: 30px; 
-    text-align: right;
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-  }
+  .day-row { display: grid; grid-template-columns: 1.6fr 1fr 0.6fr; align-items: center; padding: 12px 15px; background: #fff; margin-bottom: 8px; border-radius: 15px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+  .status-cell { font-size: 20px; text-align: right; min-width: 30px; }
   .day-name-cell { text-align: left; font-weight: 700; font-size: 17px; }
   .day-date-value { font-size: 13px; font-weight: 800; color: var(--primary-color); }
   
   .btn { width: 100%; padding: 16px; border: none; border-radius: 15px; color: #fff; font-weight: 800; font-size: 15px; cursor: pointer; margin-top: 10px; }
+  
+  .history-card { background: #fff; border-radius: 15px; padding: 15px; margin-top: 15px; border-left: 5px solid var(--success); text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+  .history-time { font-size: 11px; font-weight: 800; color: var(--primary-color); display: block; margin-bottom: 5px; }
+  .history-body { font-family: monospace; font-size: 11px; white-space: pre-wrap; color: #555; line-height: 1.3; }
+
   .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-  .modal-content { background: white; border-radius: 20px; width: 90%; max-width: 400px; padding: 20px; box-sizing: border-box; max-height: 85vh; overflow-y: auto; }
-  .admin-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .admin-field { margin-bottom: 15px; text-align: left; }
-  .admin-field label { display: block; font-size: 10px; font-weight: 800; color: #aaa; margin-bottom: 5px; text-transform: uppercase; }
+  .modal-content { background: white; border-radius: 20px; width: 90%; max-width: 400px; padding: 20px; box-sizing: border-box; max-height: 85vh; overflow-y: auto; position: relative; }
 </style>
 </head>
 <body>
@@ -87,180 +73,174 @@
 
     <h1 id="displayAppName">Weekly Availability</h1>
     
-    <div class="selectors-grid">
+    <div id="mainSelectors" class="selectors-grid">
         <div><span class="label-mini" id="lblQty">Quantidade</span><select id="weekSelect" onchange="renderWeeks()"></select></div>
         <div><span class="label-mini" id="lblJump">Semanas</span><select id="startWeekJump" onchange="renderWeeks()"></select></div>
     </div>
 
-    <div class="legend-box" id="legendContainer">
+    <div class="legend-box">
         <span id="legAvail">✅ Disponível</span>
         <span id="legUnavail">❌ Indisponível</span>
     </div>
 
     <div id="weeksContainer"></div>
 
-    <button id="sendBtn" class="btn" style="background:var(--success)">WhatsApp</button>
-    <button id="calBtn" class="btn" style="background:var(--primary-color)">Calendário</button>
-    <button id="shareBtn" class="btn" style="background:var(--share-color)">Compartilhar</button>
+    <button id="sendBtn" class="btn" style="background:var(--success)">Enviar via WhatsApp</button>
+    <div id="secondaryButtons" class="selectors-grid" style="margin-top:10px;">
+        <button id="calBtn" class="btn" style="background:var(--primary-color); margin-top:0;">Calendário</button>
+        <button id="shareBtn" class="btn" style="background:var(--share-color); margin-top:0;">Partilhar</button>
+    </div>
+    
+    <div id="historySection" style="margin-top:30px; display:none;">
+        <div style="display:flex; justify-content:space-between; font-size:9px; font-weight:900; color:#bbb; padding: 0 5px;">
+            <span id="lblHistory">RELATÓRIOS RECENTES</span>
+            <span id="clearHistoryBtn" style="color:red; cursor:pointer;">LIMPAR</span>
+        </div>
+        <div id="historyList"></div>
+    </div>
 </div>
 
 <div id="faqModal" class="modal">
     <div class="modal-content">
-        <h2 id="faqTitle" style="color:var(--primary-color); margin-top:0;">FAQ</h2>
+        <h2 id="faqTitle" style="color:var(--primary-color); margin-top:0; padding-right: 30px;">FAQ</h2>
         <div id="faqContent"></div>
-        <button id="btnCloseFaq" onclick="closeModal('faqModal')" class="btn" style="background:#333">Fechar</button>
+        <button onclick="closeModal('faqModal')" class="btn" style="background:#333; color: white; font-weight: 900; font-size: 18px; margin-top: 20px;">(X)</button>
     </div>
 </div>
 
 <div id="adminPanel" class="modal">
     <div class="modal-content">
-        <h2 id="admTitle" style="margin-top:0;">Painel Admin</h2>
-        <div class="admin-field"><label id="admLabelProject">NOME DO PROJETO</label><input type="text" id="cfgAppName" class="admin-input"></div>
-        <div class="admin-field"><label id="admLabelLogo">INICIAIS LOGO</label><input type="text" id="cfgIconInitials" class="admin-input"></div>
-        <div class="admin-field">
-            <label id="admLabelFormat">FORMATO DO TÍTULO</label>
-            <select id="cfgTitleFormat" class="admin-input">
-                <option value="full" id="optFull">Nome + Número</option>
-                <option value="num" id="optNum">Apenas Número</option>
-            </select>
+        <h2 style="margin-top:0;">Painel Admin</h2>
+        <div style="display:grid; gap:10px;">
+            <input type="text" id="cfgAppName" class="admin-input" placeholder="Nome do Projeto">
+            <input type="text" id="cfgIconInitials" class="admin-input" placeholder="Iniciais Logo">
+            <input type="text" id="cfgCustomName" class="admin-input" placeholder="Nome Específico (Modo Evento)">
+            <select id="cfgWaLang" class="admin-input"><option value="pt">WhatsApp: PT</option><option value="en">WhatsApp: EN</option><option value="ro">WhatsApp: RO</option></select>
+            <input type="number" id="cfgMaxWeeks" class="admin-input" min="1" max="3" placeholder="Máx Semanas">
+            <input type="color" id="cfgMainColor" class="admin-input" style="height:45px;">
+            <input type="color" id="cfgAccentColor" class="admin-input" style="height:45px;">
+            <select id="cfgStartDay" class="admin-input"><option value="1">Início: Segunda</option><option value="0">Início: Domingo</option></select>
+            <input type="text" id="cfgWeekTerm" class="admin-input" placeholder="Termo Semana">
+            
+            <div style="display:flex; align-items:center; background:#eee; padding:10px; border-radius:12px; justify-content: space-between;">
+                <span style="font-size:12px; font-weight:800; color:#555;">MOSTRAR CALENDÁRIO</span>
+                <input type="checkbox" id="cfgShowCal" style="width:22px; height:22px;">
+            </div>
         </div>
-        <div class="admin-field"><label id="admLabelTerm">TERMO PERSONALIZADO</label><input type="text" id="cfgWeekTerm" class="admin-input"></div>
-        <div class="admin-grid-2">
-            <div class="admin-field"><label id="admLabelMainColor">COR PRINCIPAL</label><input type="color" id="cfgMainColor" class="admin-input" style="height:45px; padding:5px;"></div>
-            <div class="admin-field"><label id="admLabelAccentColor">COR ACCENT</label><input type="color" id="cfgAccentColor" class="admin-input" style="height:45px; padding:5px;"></div>
-        </div>
-        <div class="admin-grid-2">
-            <div class="admin-field"><label id="admLabelStart">INÍCIO SEMANA</label><select id="cfgStartDay" class="admin-input"><option value="1" id="optMon">Segunda</option><option value="0" id="optSun">Domingo</option></select></div>
-            <div class="admin-field"><label id="admLabelMax">MÁX SEMANAS</label><input type="number" id="cfgMaxWeeks" class="admin-input"></div>
-        </div>
-        <button id="saveConfig" class="btn" style="background:black">Salvar Alterações</button>
-        <button id="btnBackAdm" onclick="closeModal('adminPanel')" class="btn" style="background:transparent; color:#aaa; font-size:12px;">Voltar</button>
+        <button id="saveConfig" class="btn" style="background:black; margin-top:15px;">Salvar Alterações</button>
+        <button onclick="closeModal('adminPanel')" class="btn" style="background:transparent; color:#aaa; font-size:12px;">Voltar</button>
     </div>
 </div>
 
 <script>
 const LANGS = {
     pt: { 
-        qty: "Quantidade", jump: "Semanas", date: "DATA", week: "Semana", avail: "Disponível", unavail: "Indisponível",
-        btnW: "Enviar via WhatsApp", btnC: "Lembrete Calendário", btnS: "Compartilhar App", faqT: "FAQ - Ajuda", btnClose: "Fechar",
-        admT: "Painel Admin", admProj: "NOME DO PROJETO", admLogo: "INICIAIS LOGO", admForm: "FORMATO DO TÍTULO", admTerm: "TERMO PERSONALIZADO", admMain: "COR PRINCIPAL", admAcc: "COR ACCENT", admStart: "INÍCIO SEMANA", admMax: "MÁX SEMANAS", admSave: "Salvar Alterações", admBack: "Voltar",
-        optFull: "Nome + Número", optNum: "Apenas Número", optMon: "Segunda", optSun: "Domingo",
-        days: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
+        send: "Enviar via WhatsApp", cal: "Calendário", share: "Partilhar", qty: "Quantidade", jump: "Semanas", date: "DATA", week: "Semana", avail: "Disponível", unavail: "Indisponível", history: "RELATÓRIOS RECENTES", clear: "LIMPAR", faqT: "FAQ - Ajuda", days: ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"],
         faq: [
-            {q: "Como marcar disponibilidade?", a: "Toque em qualquer dia para alternar entre ✅ e ❌."},
-            {q: "Como enviar para o WhatsApp?", a: "Clique no botão verde. A mensagem será gerada automaticamente com o texto formatado."},
-            {q: "Posso mudar o idioma?", a: "Sim, no topo direito, você pode escolher entre Português, Inglês ou Romeno."},
-            {q: "Onde mudo o nome do projeto?", a: "Segure o círculo do logo por 3 segundos para abrir o Painel Admin secreto."},
-            {q: "Para que serve o botão Calendário?", a: "Ele abre o Google Calendar para você salvar um lembrete rápido da sua escala."},
-            {q: "Como aumentar o número de semanas?", a: "No Painel Admin, altere o campo 'MÁX SEMANAS' e clique em salvar."},
-            {q: "As cores do app podem ser alteradas?", a: "Sim, use os seletores de cores no Painel Admin para personalizar o visual."},
-            {q: "Quem desenvolveu este aplicativo?", a: "Este app é uma solução exclusiva desenvolvida pela Valtail Solutions."}
+            {q: "Como marcar disponibilidade?", a: "Toque em qualquer dia da lista para alternar entre Disponível (✅) e Indisponível (❌)."},
+            {q: "Como enviar para o WhatsApp?", a: "Clique no botão verde 'Enviar via WhatsApp'. O texto será gerado no idioma configurado no Admin."},
+            {q: "O que é o Modo Evento?", a: "No Admin, se preencher 'Nome Específico', o app foca apenas nessa descrição, ocultando seletores de semanas."},
+            {q: "Como acessar o Painel Admin?", a: "Mantenha o dedo pressionado no logo circular por 3 segundos."},
+            {q: "Como ver o Histórico?", a: "Os últimos 6 relatórios (3 passados/3 futuros) aparecem no fundo da tela após o primeiro envio."},
+            {q: "O título da semana não traduz?", a: "O título segue o 'Idioma WhatsApp' definido no Admin, independente do idioma do app."},
+            {q: "Como mudar as cores?", a: "Acesse o Painel Admin e use os seletores de cor para personalizar o visual."},
+            {q: "Onde os dados são salvos?", a: "Tudo é salvo localmente no seu navegador/telemóvel. Limpar o cache remove as configurações."}
         ]
     },
     en: { 
-        qty: "Quantity", jump: "Weeks", date: "DATE", week: "Week", avail: "Available", unavail: "Unavailable",
-        btnW: "Send via WhatsApp", btnC: "Calendar Reminder", btnS: "Share App", faqT: "FAQ - Help", btnClose: "Close",
-        admT: "Admin Panel", admProj: "PROJECT NAME", admLogo: "LOGO INITIALS", admForm: "TITLE FORMAT", admTerm: "CUSTOM TERM", admMain: "MAIN COLOR", admAcc: "ACCENT COLOR", admStart: "WEEK START", admMax: "MAX WEEKS", admSave: "Save Changes", admBack: "Back",
-        optFull: "Name + Number", optNum: "Number Only", optMon: "Monday", optSun: "Sunday",
-        days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        send: "Send via WhatsApp", cal: "Calendar", share: "Share", qty: "Quantity", jump: "Weeks", date: "DATE", week: "Week", avail: "Available", unavail: "Unavailable", history: "RECENT REPORTS", clear: "CLEAR", faqT: "FAQ - Help", days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         faq: [
-            {q: "How to mark availability?", a: "Tap any day to toggle between ✅ and ❌ symbols."},
-            {q: "How to send to WhatsApp?", a: "Click the green button. The message is auto-generated with formatted text."},
-            {q: "Can I change the language?", a: "Yes, use the selector at the top right to choose PT, EN, or RO."},
-            {q: "How to change project name?", a: "Hold the logo circle for 3 seconds to open the secret Admin Panel."},
-            {q: "What is the Calendar button?", a: "It opens Google Calendar to set a quick reminder of your schedule."},
-            {q: "How to increase week count?", a: "In the Admin Panel, change the 'MAX WEEKS' field and save."},
-            {q: "Can I change app colors?", a: "Yes, use the color pickers in the Admin Panel to customize the look."},
-            {q: "Who developed this app?", a: "This app is an exclusive solution developed by Valtail Solutions."}
+            {q: "How to mark availability?", a: "Tap any day to toggle between Available (✅) and Unavailable (❌)."},
+            {q: "How to send to WhatsApp?", a: "Click the green 'Send via WhatsApp' button. Text is generated in the language set in Admin."},
+            {q: "What is Event Mode?", a: "In Admin, if you fill 'Specific Name', the app focuses only on that event."},
+            {q: "How to access Admin?", a: "Long press the circular logo for 3 seconds."},
+            {q: "How to see History?", a: "The last 6 reports (3 past/3 future) appear at the bottom after the first send."},
+            {q: "Week title not translating?", a: "The title follows the 'WhatsApp Language' set in Admin."},
+            {q: "How to change colors?", a: "Access the Admin Panel and use color pickers to customize."},
+            {q: "Where is data saved?", a: "Everything is saved locally on your device. Clearing cache removes settings."}
         ]
     },
     ro: { 
-        qty: "Cantitate", jump: "Săptămâni", date: "DATA", week: "Săptămână", avail: "Disponibil", unavail: "Indisponibil",
-        btnW: "Trimite prin WhatsApp", btnC: "Memento Calendar", btnS: "Partajează Aplicația", faqT: "Întrebări frecvente", btnClose: "Închide",
-        admT: "Panou Admin", admProj: "NUME PROIECT", admLogo: "INIȚIALE LOGO", admForm: "FORMAT TITLU", admTerm: "TERMEN PERSONALIZAT", admMain: "CULOARE PRINCIPALĂ", admAcc: "CULOARE ACCENT", admStart: "START SĂPTĂMÂNĂ", admMax: "MAX SĂPTĂMÂNI", admSave: "Salvează Modificările", admBack: "Înapoi",
-        optFull: "Nume + Număr", optNum: "Doar Număr", optMon: "Luni", optSun: "Duminică",
-        days: ["Duminică", "Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă"],
+        send: "Trimite prin WhatsApp", cal: "Calendar", share: "Partajează", qty: "Cantitate", jump: "Săptămâni", date: "DATA", week: "Săptămână", avail: "Disponibil", unavail: "Indisponibil", history: "RAPOARTE RECENTE", clear: "ȘTERGE", faqT: "FAQ - Ajutor", days: ["Duminică", "Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă"],
         faq: [
-            {q: "Cum marchez disponibilitatea?", a: "Atinge orice zi pentru a comuta între simbolurile ✅ și ❌."},
-            {q: "Cum trimit pe WhatsApp?", a: "Apasă butonul verde. Mesajul este generat automat cu text formatat."},
-            {q: "Pot schimba limba?", a: "Da, folosește selectorul din dreapta sus pentru PT, EN sau RO."},
-            {q: "Cum schimb numele proiectului?", a: "Ține apăsat pe logo timp de 3 secunde pentru Panoul Admin."},
-            {q: "La ce servește butonul Calendar?", a: "Deschide Google Calendar pentru a salva un memento rapid."},
-            {q: "Cum cresc numărul de săptămâni?", a: "În Admin, schimbă câmpul 'MAX SĂPTĂMÂNI' și salvează."},
-            {q: "Pot fi schimbate culorile?", a: "Da, folosește selectorul de culori din Admin pentru personalizare."},
-            {q: "Cine a dezvoltat aplicația?", a: "Această aplicație este o soluție dezvoltată de Valtail Solutions."}
+            {q: "Cum marchez disponibilitatea?", a: "Atinge orice zi pentru a schimba între Disponibil (✅) și Indisponibil (❌)."},
+            {q: "Trimitere WhatsApp?", a: "Apasă butonul verde 'Trimite prin WhatsApp'. Textul respectă limba setată în Admin."},
+            {q: "Ce este Modul Eveniment?", a: "În Admin, dacă completezi 'Nume Specific', aplicația se concentrează doar pe acel eveniment."},
+            {q: "Acces Panou Admin?", a: "Apasă lung pe logo-ul circular timp de 3 secunde."},
+            {q: "Unde este Istoricul?", a: "Ultimele 6 rapoarte apar în josul paginii după prima trimitere."},
+            {q: "Titlul nu se traduce?", a: "Titlul urmează setarea 'Limba WhatsApp' din Admin."},
+            {q: "Schimbare culori?", a: "Accesează Panoul Admin și folosește selectorul de culori."},
+            {q: "Unde se salvează datele?", a: "Totul este salvat local în browser. Ștergerea cache-ului va șterge setările."}
         ]
     }
 };
 
-let config = { appName: "Weekly Availability", iconInitials: "SBL", mainColor: "#0077cc", accentColor: "#0055aa", weekTerm: "", titleFormat: "full", startDay: 1, maxWeeks: 5 };
+let config = { appName: "Weekly Availability", iconInitials: "SBL", mainColor: "#0077cc", accentColor: "#0055aa", weekTerm: "", waLang: "en", startDay: 1, maxWeeks: 3, customName: "", showCalendar: true };
 let curLang = 'pt';
+let history = [];
+let selections = {};
 
 function init() {
     const savedLang = localStorage.getItem('_v_lang'); if (savedLang) curLang = savedLang;
-    const savedCfg = localStorage.getItem('_v_cfg_vF2'); if (savedCfg) config = {...config, ...JSON.parse(savedCfg)};
+    const savedCfg = localStorage.getItem('_v_cfg_vFinalV8'); if (savedCfg) config = {...config, ...JSON.parse(savedCfg)};
+    const savedHist = localStorage.getItem('_v_hist_smart_v4'); if (savedHist) history = JSON.parse(savedHist);
+    const savedSels = localStorage.getItem('_v_sels'); if (savedSels) selections = JSON.parse(savedSels);
     document.getElementById('langSelect').value = curLang;
-    applyStyles(); populateSelectors(); updateUI(); setupLogo();
+    applyStyles(); populateSelectors(); updateUI();
 }
 
 function applyStyles() {
     document.documentElement.style.setProperty('--primary-color', config.mainColor);
     document.documentElement.style.setProperty('--accent-color', config.accentColor);
-}
-
-function changeLang(val) {
-    curLang = val; localStorage.setItem('_v_lang', val);
-    populateSelectors(); updateUI();
+    document.getElementById('displayAppName').textContent = config.appName;
+    document.getElementById('mainLogo').textContent = config.iconInitials;
 }
 
 function updateUI() {
     const l = LANGS[curLang];
+    document.getElementById('sendBtn').textContent = l.send;
+    document.getElementById('calBtn').textContent = l.cal;
+    document.getElementById('shareBtn').textContent = l.share;
     document.getElementById('lblQty').textContent = l.qty;
     document.getElementById('lblJump').textContent = l.jump;
-    document.getElementById('displayAppName').textContent = config.appName;
-    document.getElementById('mainLogo').textContent = config.iconInitials;
-    document.getElementById('sendBtn').textContent = l.btnW;
-    document.getElementById('calBtn').textContent = l.btnC;
-    document.getElementById('shareBtn').textContent = l.btnS;
+    document.getElementById('lblHistory').textContent = l.history;
+    document.getElementById('clearHistoryBtn').textContent = l.clear;
     document.getElementById('faqTitle').textContent = l.faqT;
-    document.getElementById('btnCloseFaq').textContent = l.btnClose;
     document.getElementById('legAvail').textContent = `✅ ${l.avail}`;
     document.getElementById('legUnavail').textContent = `❌ ${l.unavail}`;
+
+    const calBtn = document.getElementById('calBtn');
+    const secGrid = document.getElementById('secondaryButtons');
+    if(config.showCalendar === false) {
+        calBtn.style.display = 'none';
+        secGrid.style.gridTemplateColumns = '1fr';
+    } else {
+        calBtn.style.display = 'block';
+        secGrid.style.gridTemplateColumns = '1fr 1fr';
+    }
+
     const faqCont = document.getElementById('faqContent'); faqCont.innerHTML = "";
-    l.faq.forEach(f => faqCont.innerHTML += `<div style="text-align:left; border-bottom:1px solid #eee; padding:10px 0;"><b style="color:var(--primary-color); font-size:14px;">${f.q}</b><br><span style="font-size:13px; color:#666;">${f.a}</span></div>`);
-    document.getElementById('admTitle').textContent = l.admT;
-    document.getElementById('admLabelProject').textContent = l.admProj;
-    document.getElementById('admLabelLogo').textContent = l.admLogo;
-    document.getElementById('admLabelFormat').textContent = l.admForm;
-    document.getElementById('admLabelTerm').textContent = l.admTerm;
-    document.getElementById('admLabelMainColor').textContent = l.admMain;
-    document.getElementById('admLabelAccentColor').textContent = l.admAcc;
-    document.getElementById('admLabelStart').textContent = l.admStart;
-    document.getElementById('admLabelMax').textContent = l.admMax;
-    document.getElementById('saveConfig').textContent = l.admSave;
-    document.getElementById('btnBackAdm').textContent = l.admBack;
-    document.getElementById('optFull').textContent = l.optFull;
-    document.getElementById('optNum').textContent = l.optNum;
-    document.getElementById('optMon').textContent = l.optMon;
-    document.getElementById('optSun').textContent = l.optSun;
-    renderWeeks();
+    l.faq.forEach(f => faqCont.innerHTML += `<div style="text-align:left; border-bottom:1px solid #eee; padding:12px 0;"><b style="color:var(--primary-color); font-size:13px; display:block; margin-bottom:4px;">${f.q}</b><span style="font-size:12px; color:#555;">${f.a}</span></div>`);
+    
+    setupLogo(); renderWeeks(); renderHistory();
 }
 
 function populateSelectors() {
     const l = LANGS[curLang];
     const term = config.weekTerm || l.week;
     const qSel = document.getElementById('weekSelect'); qSel.innerHTML = "";
-    for(let i=1; i<=config.maxWeeks; i++) qSel.innerHTML += `<option value="${i}">${i} ${term}${i>1 && (curLang=='pt' || curLang=='ro')?'s':''}</option>`;
+    for(let i=1; i<=Math.min(config.maxWeeks, 3); i++) qSel.innerHTML += `<option value="${i}">${i} ${term}${i>1?'s':''}</option>`;
+    qSel.value = "1";
+
     const jSel = document.getElementById('startWeekJump'); jSel.innerHTML = "";
-    for(let i=14; i<14+config.maxWeeks; i++) jSel.innerHTML += `<option value="${i}">${term} ${i}</option>`;
+    [14, 15, 16, 17].forEach(w => jSel.innerHTML += `<option value="${w}">${term} ${w}</option>`);
+    jSel.value = "15";
 }
 
 function getDateOfISOWeek(w, dayIndex, year) {
     let simple = new Date(year, 0, 1 + (w - 1) * 7);
-    let dow = simple.getDay();
     let ISOweekStart = simple;
-    if (dow <= 4) ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
-    else ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+    ISOweekStart.setDate(simple.getDate() - (simple.getDay() || 7) + 1);
     let target = new Date(ISOweekStart);
     target.setDate(ISOweekStart.getDate() + (dayIndex == 0 ? 6 : dayIndex - 1));
     return target;
@@ -268,27 +248,34 @@ function getDateOfISOWeek(w, dayIndex, year) {
 
 function renderWeeks() {
     const container = document.getElementById("weeksContainer"); container.innerHTML = "";
-    const qty = parseInt(document.getElementById("weekSelect").value) || 1;
-    const startW = parseInt(document.getElementById("startWeekJump").value);
+    const qty = config.customName ? 1 : parseInt(document.getElementById("weekSelect").value);
+    const startW = config.customName ? 15 : parseInt(document.getElementById("startWeekJump").value);
     const l = LANGS[curLang];
     const term = config.weekTerm || l.week;
-    let dayIndices = config.startDay === 1 ? [1, 2, 3, 4, 5, 6, 0] : [0, 1, 2, 3, 4, 5, 6];
+    let dayIndices = config.startDay == 1 ? [1, 2, 3, 4, 5, 6, 0] : [0, 1, 2, 3, 4, 5, 6];
+
+    document.getElementById('mainSelectors').style.display = config.customName ? 'none' : 'grid';
+
     for (let w = 0; w < qty; w++) {
         const targetW = startW + w;
         const group = document.createElement("div"); group.className = "week-group";
-        const titleText = config.titleFormat === 'full' ? `${term} ${targetW}` : targetW;
-        group.innerHTML = `<div class="week-title" data-wnum="${targetW}">${titleText}</div>`;
+        const titleText = config.customName ? config.customName : `${term} ${targetW}`;
+        group.innerHTML = `<div class="week-title" data-week-num="${targetW}" data-week-id="${titleText}">${titleText}</div>`;
+        
         dayIndices.forEach((idx) => {
             const dateObj = getDateOfISOWeek(targetW, idx, 2026);
-            const d = String(dateObj.getDate()).padStart(2, '0');
-            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const dStr = String(dateObj.getDate()).padStart(2, '0') + '/' + String(dateObj.getMonth() + 1).padStart(2, '0');
+            const dayId = `${targetW}-${idx}`;
+            const currentStatus = selections[dayId] || "✅";
             const row = document.createElement("div"); row.className = "day-row";
-            row.innerHTML = `<div class="day-name-cell">${l.days[idx]}</div><div style="text-align:center"><span style="font-size:8px; color:#bbb; display:block;">${l.date}</span><span class="day-date-value">${d}/${m}</span></div><div class="status-cell">✅</div>`;
-            row.onclick = function() {
-                const s = this.querySelector(".status-cell");
+            row.style.opacity = currentStatus === "❌" ? "0.7" : "1";
+            row.innerHTML = `<div class="day-name-cell">${l.days[idx]}</div><div style="text-align:center"><span style="font-size:8px; color:#bbb; display:block;">${l.date}</span><span class="day-date-value">${dStr}</span></div><div class="status-cell">${currentStatus}</div>`;
+            row.onclick = () => {
+                const s = row.querySelector(".status-cell");
                 s.textContent = s.textContent === "✅" ? "❌" : "✅";
-                this.style.opacity = s.textContent === "❌" ? "0.75" : "1";
-                this.style.background = s.textContent === "❌" ? "#fdfdfd" : "#fff";
+                row.style.opacity = s.textContent === "❌" ? "0.7" : "1";
+                selections[dayId] = s.textContent;
+                localStorage.setItem('_v_sels', JSON.stringify(selections));
             };
             group.appendChild(row);
         });
@@ -299,57 +286,96 @@ function renderWeeks() {
 function setupLogo() {
     const logo = document.getElementById('mainLogo'); let t; let isLong = false;
     logo.onmousedown = logo.ontouchstart = (e) => { isLong = false; t = setTimeout(() => { isLong = true; openAdmin(); }, 3000); };
-    logo.onmouseup = logo.ontouchend = (e) => { clearTimeout(t); if(!isLong && e.cancelable) { openModal('faqModal'); } };
+    logo.onmouseup = logo.ontouchend = (e) => { clearTimeout(t); if(!isLong) openModal('faqModal'); };
 }
 
 function openAdmin() {
     document.getElementById('cfgAppName').value = config.appName;
     document.getElementById('cfgIconInitials').value = config.iconInitials;
-    document.getElementById('cfgWeekTerm').value = config.weekTerm;
+    document.getElementById('cfgCustomName').value = config.customName;
+    document.getElementById('cfgWaLang').value = config.waLang;
+    document.getElementById('cfgMaxWeeks').value = config.maxWeeks;
     document.getElementById('cfgMainColor').value = config.mainColor;
     document.getElementById('cfgAccentColor').value = config.accentColor;
-    document.getElementById('cfgTitleFormat').value = config.titleFormat;
     document.getElementById('cfgStartDay').value = config.startDay;
-    document.getElementById('cfgMaxWeeks').value = config.maxWeeks;
+    document.getElementById('cfgWeekTerm').value = config.weekTerm;
+    document.getElementById('cfgShowCal').checked = config.showCalendar;
     openModal('adminPanel');
 }
 
 document.getElementById('saveConfig').onclick = () => {
     config.appName = document.getElementById('cfgAppName').value;
     config.iconInitials = document.getElementById('cfgIconInitials').value;
-    config.weekTerm = document.getElementById('cfgWeekTerm').value;
+    config.customName = document.getElementById('cfgCustomName').value;
+    config.waLang = document.getElementById('cfgWaLang').value;
+    config.maxWeeks = Math.min(parseInt(document.getElementById('cfgMaxWeeks').value), 3);
     config.mainColor = document.getElementById('cfgMainColor').value;
     config.accentColor = document.getElementById('cfgAccentColor').value;
-    config.titleFormat = document.getElementById('cfgTitleFormat').value;
     config.startDay = parseInt(document.getElementById('cfgStartDay').value);
-    config.maxWeeks = parseInt(document.getElementById('cfgMaxWeeks').value);
-    localStorage.setItem('_v_cfg_vF2', JSON.stringify(config));
+    config.weekTerm = document.getElementById('cfgWeekTerm').value;
+    config.showCalendar = document.getElementById('cfgShowCal').checked;
+    localStorage.setItem('_v_cfg_vFinalV8', JSON.stringify(config));
     location.reload();
 };
 
 document.getElementById('sendBtn').onclick = () => {
-    const l = LANGS[curLang];
-    const term = config.weekTerm || l.week;
-    let msg = `*${config.appName}*\n\n`;
-    // LEGENDA EM UMA LINHA SÓ
-    msg += `✅ ${l.avail} | ❌ ${l.unavail}\n\n`;
-    document.querySelectorAll('.week-group').forEach(g => {
-        const weekNum = g.querySelector('.week-title').getAttribute('data-wnum');
-        const titleText = config.titleFormat === 'full' ? `${term} ${weekNum}` : weekNum;
+    const waL = LANGS[config.waLang];
+    const waTerm = config.weekTerm || waL.week;
+    let msg = `*${config.appName}*\n\n✅ ${waL.avail} | ❌ ${waL.unavail}\n\n`;
+    let primaryWeekId = ""; let isFuture = false; const currentWeekNum = 15; 
+
+    document.querySelectorAll('.week-group').forEach((g, i) => {
+        const weekNum = parseInt(g.querySelector('.week-title').getAttribute('data-week-num'));
+        const titleText = config.customName ? config.customName : `${waTerm} ${weekNum}`;
+        if(i === 0) { primaryWeekId = titleText; isFuture = weekNum >= currentWeekNum; }
         msg += `*${titleText}*\n\n`;
         g.querySelectorAll('.day-row').forEach(r => {
-            msg += `${r.querySelector('.status-cell').textContent}  ${r.querySelector('.day-date-value').innerText}  ${r.querySelector('.day-name-cell').innerText}\n`;
+            const date = r.querySelector('.day-date-value').innerText;
+            const currentDayName = r.querySelector('.day-name-cell').innerText;
+            const dayIndex = LANGS[curLang].days.indexOf(currentDayName);
+            msg += `${r.querySelector('.status-cell').textContent}  ${date}  ${waL.days[dayIndex]}\n`;
         });
         msg += `\n`;
     });
     msg += `_powered by valtail solutions_`;
+
+    const now = new Date().toLocaleString();
+    const existingIdx = history.findIndex(h => h.weekId === primaryWeekId);
+    if (existingIdx !== -1) history[existingIdx] = { weekId: primaryWeekId, time: now, content: msg, isFuture: isFuture };
+    else history.push({ weekId: primaryWeekId, time: now, content: msg, isFuture: isFuture });
+
+    const past = history.filter(h => !h.isFuture).slice(-3);
+    const future = history.filter(h => h.isFuture).slice(-3);
+    history = [...past, ...future];
+
+    localStorage.setItem('_v_hist_smart_v4', JSON.stringify(history));
+    renderHistory();
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`);
 };
 
-document.getElementById('shareBtn').onclick = () => { if(navigator.share) navigator.share({title: config.appName, url: window.location.href}); else alert("Link: " + window.location.href); };
+function renderHistory() {
+    const list = document.getElementById('historyList'); list.innerHTML = "";
+    if(history.length > 0) {
+        document.getElementById('historySection').style.display = 'block';
+        history.slice().reverse().forEach(h => {
+            list.innerHTML += `<div class="history-card"><span class="history-time">${h.time}</span><div class="history-body">${h.content}</div></div>`;
+        });
+    }
+}
+
+document.getElementById('clearHistoryBtn').onclick = () => {
+    if(confirm("Limpar histórico?")) { history = []; localStorage.removeItem('_v_hist_smart_v4'); renderHistory(); document.getElementById('historySection').style.display = 'none'; }
+};
+
+document.getElementById('shareBtn').onclick = () => {
+    if (navigator.share) { navigator.share({ title: config.appName, url: window.location.href }); } 
+    else { prompt("Link:", window.location.href); }
+};
+
 document.getElementById('calBtn').onclick = () => window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(config.appName)}`);
 function openModal(id) { document.getElementById(id).style.display = 'flex'; }
 function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+function changeLang(v) { curLang = v; localStorage.setItem('_v_lang', v); location.reload(); }
 window.onload = init;
 </script>
 </body>
